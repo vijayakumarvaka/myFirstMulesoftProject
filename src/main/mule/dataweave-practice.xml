@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="297650af-618b-43e4-8f6f-dd78064517e3" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="dataweave-practiceFlow" doc:id="816b31b2-79b9-4cdc-af25-766186782c69" >
+		<http:listener doc:name="Listener" doc:id="0da47d7e-a948-4d5e-bf01-ebe4efdf3ab2" config-ref="HTTP_Listener_config" path="/dw"/>
+		<ee:transform doc:name="Transform Message" doc:id="bd7b8c68-23ac-4d00-800d-c64c2eb6112d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output aplication/json
+var v = {
+	"0": {
+		"firstname": "vijay",
+		"lastname" : "vaka"
+		
+	},
+	"1": {
+		"firstname": "Mahesh",
+		"lastname" : "vaka"
+	}
+}
+
+fun calculateResult (marks: Number) = if (marks > 50) "PASS" else "FAIL"
+
+---
+(v pluck (value, key, index) -> {
+	"firstname" : value.firstname,
+	"lastname" : value.lastname,
+	"Index": index,
+	"Pass or Fail" : calculateResult(54)
+}) filter ((item, index) -> item.firstname == "vijay")]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
