@@ -37,5 +37,6 @@ fun calculateResult (marks: Number) = if (marks > 50) "PASS" else "FAIL"
 }) filter ((item, index) -> item.firstname == "vijay")]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ecda5a5a-4531-4526-9460-224d634ea22a" message="hi"/>
 	</flow>
 </mule>
